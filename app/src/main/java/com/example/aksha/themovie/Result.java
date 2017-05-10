@@ -8,10 +8,10 @@ import java.util.List;
 
 public class Result {
 
-    public String posterPath;
+    public String poster_path;
     public Boolean adult;
     public String overview;
-    public String releaseDate;
+    public String release_date;
     public List<Integer> genreIds = null;
     public Integer id;
     public String originalTitle;
@@ -21,6 +21,6 @@ public class Result {
     public Double popularity;
     public Integer voteCount;
     public Boolean video;
-    public Integer voteAverage;
+    public Double vote_average;
 
 }

@@ -31,10 +31,11 @@ public class MovieFragment extends Fragment {
     private static final String TAG = "Fragment";
     private static RequestQueue mRequestQueue;
     // TODO: Customize parameters
-    private int mColumnCount = 1;
+    private boolean mColumnCount = false;
     private OnListFragmentInteractionListener mListener;
     private static String jsonUrl = null;
-    List<Result> items=new ArrayList<>();
+    List<Result> items = new ArrayList<>();
+    MyItemRecyclerViewAdapter adapter;
 
 
     /**
@@ -44,15 +45,13 @@ public class MovieFragment extends Fragment {
     public MovieFragment() {
     }
 
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
-    public static MovieFragment newInstance(int columnCount, String json, RequestQueue queue) {
+    public static MovieFragment newInstance(boolean layout, String json, RequestQueue queue) {
         MovieFragment fragment = new MovieFragment();
         Bundle args = new Bundle();
         jsonUrl = json;
         mRequestQueue = queue;
 
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
+        args.putBoolean(ARG_COLUMN_COUNT, layout);
         fragment.setArguments(args);
         return fragment;
     }
@@ -62,7 +61,7 @@ public class MovieFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
+            mColumnCount = getArguments().getBoolean(ARG_COLUMN_COUNT);
         }
         customGSONRequest();
     }
@@ -76,12 +75,13 @@ public class MovieFragment extends Fragment {
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
+            if (!mColumnCount) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+                recyclerView.setLayoutManager(new GridLayoutManager(context, 2));
             }
-            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(items, mListener));
+            adapter = new MyItemRecyclerViewAdapter(items, mListener, getContext());
+            recyclerView.setAdapter(adapter);
         }
         return view;
     }
@@ -120,14 +120,13 @@ public class MovieFragment extends Fragment {
     }
 
 
-
     private Response.Listener<MyGson> createSuccessListener() {
         return new Response.Listener<MyGson>() {
             @Override
             public void onResponse(MyGson response) {
-                for (Result result : response.results) {
-                    items.add(result);
-                    Log.i(TAG, "onResponse: "+result.title);
+                for (int i = 0; i < response.results.size(); i++) {
+                    items.add(response.results.get(i));
+                    adapter.notifyItemInserted(i);
                 }
             }
         };
@@ -137,7 +136,7 @@ public class MovieFragment extends Fragment {
         return new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                Log.i(TAG, "onErrorResponse: "+error.getMessage());
             }
         };
     }

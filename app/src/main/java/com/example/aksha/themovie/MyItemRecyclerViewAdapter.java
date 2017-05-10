@@ -1,23 +1,31 @@
 package com.example.aksha.themovie;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.aksha.themovie.MovieFragment.OnListFragmentInteractionListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> {
 
-    private final List<Result> mValues;
+    private static final String TAG = "Adapter";
+    final List<Result> mValues;
     private final OnListFragmentInteractionListener mListener;
+    Context mContext;
+    String base="http://image.tmdb.org/t/p/w185/";
 
-    public MyItemRecyclerViewAdapter(List<Result> items, OnListFragmentInteractionListener listener) {
+    public MyItemRecyclerViewAdapter(List<Result> items, OnListFragmentInteractionListener listener,Context a) {
         mValues = items;
         mListener = listener;
+        mContext=a;
     }
 
     @Override
@@ -27,11 +35,16 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         return new ViewHolder(view);
     }
 
+
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).overview);
-        holder.mContentView.setText(mValues.get(position).title);
+
+        holder.title.setText(mValues.get(position).title);
+        holder.overview.setText(mValues.get(position).overview);
+        String url=base+(mValues.get(position).poster_path);
+        Log.i(TAG, "onBindViewHolder: "+url+"       "+mValues.get(position).poster_path);
+        Picasso.with(mContext).load(url).into(holder.poster);
+
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,20 +65,19 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
+        public final TextView title;
         public Result mItem;
+        TextView overview;
+        ImageView poster;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            title = (TextView) view.findViewById(R.id.title);
+            overview= (TextView) view.findViewById(R.id.overview);
+            poster= (ImageView) view.findViewById(R.id.poster);
         }
 
-        @Override
-        public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
-        }
+
     }
 }
