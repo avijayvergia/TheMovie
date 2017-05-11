@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 public class DetailActivity extends AppCompatActivity{
 
+    private static final String TAG = "DetailActivity";
     ImageView poster;
     TextView release_date,overview,vote,title;
 
@@ -28,9 +30,10 @@ public class DetailActivity extends AppCompatActivity{
         vote= (TextView) findViewById(R.id.vote);
         title= (TextView) findViewById(R.id.title);
         Intent intent=getIntent();
+
+        Log.i(TAG, "onCreate: "+intent.getStringExtra("title")+" " +intent.getStringExtra("overview"));
         title.setText(intent.getStringExtra("title"));
         release_date.setText(intent.getStringExtra("release"));
-        vote.setText(intent.getStringExtra("vote"));
         overview.setText(intent.getStringExtra("overview"));
     }
 }

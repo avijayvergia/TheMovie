@@ -20,12 +20,12 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     final List<Result> mValues;
     private final OnListFragmentInteractionListener mListener;
     Context mContext;
-    String base="http://image.tmdb.org/t/p/w185/";
+    String base = "http://image.tmdb.org/t/p/w185/";
 
-    public MyItemRecyclerViewAdapter(List<Result> items, OnListFragmentInteractionListener listener,Context a) {
+    public MyItemRecyclerViewAdapter(List<Result> items, OnListFragmentInteractionListener listener, Context a) {
         mValues = items;
         mListener = listener;
-        mContext=a;
+        mContext = a;
     }
 
     @Override
@@ -38,11 +38,11 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-
+        holder.mItem = mValues.get(position);
         holder.title.setText(mValues.get(position).title);
         holder.overview.setText(mValues.get(position).overview);
-        String url=base+(mValues.get(position).poster_path);
-        Log.i(TAG, "onBindViewHolder: "+url+"       "+mValues.get(position).poster_path);
+        String url = base + (mValues.get(position).poster_path);
+        Log.i(TAG, "onBindViewHolder: " + url + "       " + mValues.get(position).poster_path);
         Picasso.with(mContext).load(url).into(holder.poster);
 
 
@@ -74,8 +74,8 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
             super(view);
             mView = view;
             title = (TextView) view.findViewById(R.id.title);
-            overview= (TextView) view.findViewById(R.id.overview);
-            poster= (ImageView) view.findViewById(R.id.poster);
+            overview = (TextView) view.findViewById(R.id.overview);
+            poster = (ImageView) view.findViewById(R.id.poster);
         }
 
 

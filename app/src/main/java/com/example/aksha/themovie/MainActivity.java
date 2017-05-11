@@ -1,5 +1,6 @@
 package com.example.aksha.themovie;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -7,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements MovieFragment.OnL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getSupportActionBar().setTitle("Popular Movies");
         mRequestQueue = MySingleton.getInstance(this.getApplicationContext()).
                 getRequestQueue();
         navigation = (BottomNavigationView) findViewById(R.id.navigation);
@@ -52,7 +53,12 @@ public class MainActivity extends AppCompatActivity implements MovieFragment.OnL
 
     @Override
     public void onListFragmentInteraction(Result item) {
-
+        Intent intent = new Intent(this, DetailActivity.class);
+        intent.putExtra("title", item.title);
+        intent.putExtra("release", item.release_date);
+        intent.putExtra("vote", item.vote_average);
+        intent.putExtra("overview", item.overview);
+        startActivity(intent);
     }
 
     public void setFrag(MenuItem item) {
