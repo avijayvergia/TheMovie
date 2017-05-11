@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+import com.google.gson.Gson;
 
 public class DetailOne extends AppCompatActivity {
 
@@ -29,12 +30,14 @@ public class DetailOne extends AppCompatActivity {
 
         Bundle intent=getIntent().getExtras();
 
-        if(intent!=null){
-            Log.i(TAG, "onCreate: "+intent.getString("title")+" " +intent.getString("overview")+"  "+intent.get("poster"));
-            title.setText(intent.getString("title"));
-            release_date.setText(intent.getString("release"));
-            overview.setText(intent.getString("overview"));
-            url=url+intent.getString("poster");
+        String x=intent.getString("item");
+        Result item=(new Gson()).fromJson(x,Result.class);
+        if(item!=null){
+            Log.i(TAG, "onCreate: "+item.title+" " +item.overview+"  "+item.poster_path);
+            title.setText(item.title);
+            release_date.setText(item.release_date);
+            overview.setText(item.overview);
+            url=url+item.poster_path;
 
             Picasso.with(this).load(url).into(poster);
         }

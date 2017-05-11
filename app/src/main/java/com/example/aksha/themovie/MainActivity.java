@@ -13,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.android.volley.RequestQueue;
+import com.google.gson.Gson;
 
 public class MainActivity extends AppCompatActivity implements MovieFragment.OnListFragmentInteractionListener {
 
@@ -54,11 +55,8 @@ public class MainActivity extends AppCompatActivity implements MovieFragment.OnL
     @Override
     public void onListFragmentInteraction(Result item) {
         Intent intent = new Intent(this, DetailOne.class);
-        intent.putExtra("title", item.title);
-        intent.putExtra("release", item.release_date);
-        intent.putExtra("vote", item.vote_average);
-        intent.putExtra("overview", item.overview);
-        intent.putExtra("poster",item.backdrop_path);
+        String topass=(new Gson()).toJson(item);
+        intent.putExtra("item",topass);
         startActivity(intent);
     }
 
