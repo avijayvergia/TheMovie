@@ -17,7 +17,7 @@ public class Result {
     public String originalTitle;
     public String originalLanguage;
     public String title;
-    public String backdropPath;
+    public String backdrop_path;
     public Double popularity;
     public Integer voteCount;
     public Boolean video;
